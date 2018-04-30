@@ -22,6 +22,8 @@ public:
 	void boja_ispis();
 	void cls_ispis();//Ironic isnt it?
 	int cls_g_get();
+	void timer_set(int timer);
+	int timer_get();
 
 
 
@@ -31,6 +33,7 @@ private:
 	int sr;
 	int cls_m;
 	int cls_g;
+	int timer;
 	char alive;
 	char dead;
 	char poz;

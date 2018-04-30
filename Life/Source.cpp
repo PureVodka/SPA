@@ -12,9 +12,10 @@ Postavke settings;
 void ini() {
 	//std::string boja = "COLOR 07";
 	system("COLOR 07");
-	settings.s_set(40);
-	settings.v_set(40);
+	settings.s_set(4);
+	settings.v_set(4);
 	settings.sr_set(35);
+	settings.timer_set(3);
 	settings.alive_set('1');
 	settings.dead_set('0');
 	settings.boja_set('0', '7');
@@ -121,7 +122,7 @@ void cls_screen(int clsm) {
 	}
 	}
 }
-
+void igraai();
 int main() {
 	if(main_visit == 0){ ini(); }
 	main_visit++;
@@ -131,26 +132,30 @@ int main() {
 	}
 	for(;terminate_program == 0;){
 	int q;
-	std::cout << "Glavni izbornik: " << std::endl << "1. Pocetak igre" << std::endl  << "2. Postavke" << std::endl << "3. Credits???" << std::endl << "4. Izlaz" << std::endl;
+	std::cout << "Glavni izbornik: " << std::endl << "1. Zadani zadatak" << std::endl  << "2. Igra protiv AI-a" << std::endl << "3. Postavke" << std::endl << "4. Credits???"<<std::endl << "5. EXIT" << std::endl;
 	q = unos_int(1);
 
 	if (q == 1) {
 		igra();
 		main();
 	}
-	else if (q == 2) {
+	else if (q == 3) {
 		postavke_main();
 
 	}
-	else if (q == 3) {
+	else if (q == 4) {
 		std::cout << "lol netko zapravo otvara \"Credits\" u igrici?";
 
 	}
-	else if (q == 4) {
+	else if (q == 5) {
 		std::cout << "END" <<std::endl;
 		terminate_program = 1;
 		break;
 	
+	}
+	else if (q == 2) {
+		igraai();
+
 	}
 	else {
 		std::cout << "Krivi odabir, probajte ponovno" << std::endl;
@@ -164,12 +169,26 @@ int main() {
 
 void igra() {
 	Ploca life(settings.s_get(), settings.v_get(), settings.sr_get(), settings.alive_get(), settings.dead_get(), settings.cls_g_get());
-	life.ini();
+	life.ini(0);
 	life.game_run();
 
 
 	std::cout << std::endl << std::endl;
 	
+	main();
+}
+
+void igraai() {
+	std::cout << std::endl;
+	std::cout << "AI i Vi dobivate jedno isto pocetno polje. Obavezno morate staviti jednu zivu celiju na Vasem potezu. To radite tako sto unesete broj lokacije celije (Prijedlog je ne igrati s velikim poljem). AI ce napraviti isto te ce se uci u sljedecu generaciju (Provjera pravila) te ponovno stavljate zivu celiju. Igra traje: " << settings.timer_get() << " kruga (Mozete promjeniti u postavkama)" <<  std::endl;
+	Ploca life(settings.s_get(), settings.v_get(), settings.sr_get(), settings.alive_get(), settings.dead_get(), settings.cls_g_get());
+	life.timer_set(settings.timer_get());
+	life.ini(1);
+	life.aigame();
+
+
+	std::cout << std::endl << std::endl;
+
 	main();
 }
 
@@ -203,7 +222,7 @@ void postavke_main() {
 void postavke_uvjeti() {
 	int terminate_uvjeti = 0;
 	for(;terminate_uvjeti == 0;){
-	std::cout << "Trenutne postavke polja te opcije: " << std::endl << "1. Sirina: " << settings.s_get() << std::endl << "2. Visina: " << settings.v_get() << std::endl << "3. Sanas za nastajanjem \"zive\" celije: " << settings.sr_get() << std::endl << "4. Prikaz \"zive\" celije: " << settings.alive_get() << std::endl << "5. Prikaz \"mrtve\" celije: " << settings.dead_get() << std::endl << "6. Povratak na prosli meni (Postavke)" << std::endl << "0. Povratak na glavni meni";
+		std::cout << "Trenutne postavke polja te opcije: " << std::endl << "1. Sirina: " << settings.s_get() << std::endl << "2. Visina: " << settings.v_get() << std::endl << "3. Sanas za nastajanjem \"zive\" celije: " << settings.sr_get() << std::endl << "4. Prikaz \"zive\" celije: " << settings.alive_get() << std::endl << "5. Prikaz \"mrtve\" celije: " << settings.dead_get() << std::endl << "6. Timer (protiv AI-a): " << settings.timer_get()<< std::endl << "7. Povratak na prosli meni (Postavke)" << std::endl << "0. Povratak na glavni meni";
 	std::cout << "Odaberite koju od gore navedenih postavki:" << std::endl;
 	int x;
 	x = unos_int(1);
@@ -245,6 +264,13 @@ void postavke_uvjeti() {
 	
 	}
 	else if (x == 6) {
+		std::cout << "Unesite zeljeno trajanje igre u potezima (Samo protiv AI-a): ";
+		int timer;
+		timer = unos_int(1);
+		settings.timer_set(timer);
+
+	}
+	else if (x == 7) {
 		postavke_main();
 		terminate_uvjeti = 1;
 

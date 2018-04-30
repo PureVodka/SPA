@@ -55,6 +55,16 @@ int Postavke::cls_g_get()
 	return cls_g;
 }
 
+void Postavke::timer_set(int timer)
+{
+	this->timer = timer;
+}
+
+int Postavke::timer_get()
+{
+	return timer;
+}
+
 int Postavke::v_get()
 {
 	return v;
